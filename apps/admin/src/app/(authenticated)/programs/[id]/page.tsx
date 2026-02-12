@@ -32,6 +32,21 @@ interface ProgramDetail {
   announcements: AnnouncementItem[];
 }
 
+interface ParticipantItem {
+  id: string;
+  userId: string;
+  userName: string;
+  announcementName: string;
+  jobType: string;
+  participationStatus: string;
+  evalTotalScore: number | null;
+  evalScores: Record<string, number> | null;
+  evalComment: string | null;
+  role: string | null;
+  evaluatedByName: string | null;
+  evaluatedAt: string | null;
+}
+
 const REGIONS: Record<string, string[]> = {
   서울: [
     '강남구',
@@ -281,6 +296,7 @@ export default function ProgramDetailPage() {
   const params = useParams();
   const id = params.id as string;
   const [program, setProgram] = useState<ProgramDetail | null>(null);
+  const [participants, setParticipants] = useState<ParticipantItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -297,8 +313,12 @@ export default function ProgramDetailPage() {
 
   const fetchProgram = useCallback(async () => {
     try {
-      const data = await api<ProgramDetail>(`/admin/programs/${id}`);
+      const [data, participantsData] = await Promise.all([
+        api<ProgramDetail>(`/admin/programs/${id}`),
+        api<ParticipantItem[]>(`/admin/programs/${id}/participants`),
+      ]);
       setProgram(data);
+      setParticipants(participantsData);
       setForm({
         name: data.name,
         host: data.host,
@@ -393,6 +413,28 @@ export default function ProgramDetailPage() {
       upcoming: 'bg-blue-100 text-blue-800',
       recruiting: 'bg-green-100 text-green-800',
       closed: 'bg-gray-100 text-gray-600',
+    };
+    return colors[status] || 'bg-gray-100 text-gray-600';
+  }
+
+  function participationStatusLabel(status: string) {
+    const labels: Record<string, string> = {
+      upcoming: '활동 예정',
+      active: '활동 중',
+      period_ended: '활동 기간 종료',
+      completed: '수료',
+      dropped: '중도 이탈',
+    };
+    return labels[status] || status;
+  }
+
+  function participationBadge(status: string) {
+    const colors: Record<string, string> = {
+      upcoming: 'bg-blue-100 text-blue-800',
+      active: 'bg-green-100 text-green-800',
+      period_ended: 'bg-gray-100 text-gray-600',
+      completed: 'bg-purple-100 text-purple-800',
+      dropped: 'bg-red-100 text-red-800',
     };
     return colors[status] || 'bg-gray-100 text-gray-600';
   }
@@ -630,7 +672,7 @@ export default function ProgramDetailPage() {
         </Link>
       </div>
 
-      <div className="overflow-x-auto border border-gray-200 bg-white">
+      <div className="mb-8 overflow-x-auto border border-gray-200 bg-white">
         <table className="w-full text-left text-sm">
           <thead className="border-b border-gray-200 bg-gray-50">
             <tr>
@@ -681,6 +723,72 @@ export default function ProgramDetailPage() {
               <tr>
                 <td colSpan={7} className="px-4 py-8 text-center text-gray-500">
                   연결된 공고가 없습니다.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Participants section */}
+      <div className="mb-4 flex items-center justify-between">
+        <div>
+          <h2 className="text-lg font-bold text-[#0a1432]">참가자 목록</h2>
+          <p className="mt-1 text-xs text-gray-500">
+            공고에 최종 합격한 사람들이 참가자로 표시됩니다.
+          </p>
+        </div>
+        <Link
+          href={`/programs/${id}/evaluate`}
+          className={`px-4 py-2 text-sm font-medium ${
+            program.status === '종료'
+              ? 'bg-[#e1fb36] text-[#0a1432] hover:bg-[#e1fb36]/80'
+              : 'cursor-not-allowed bg-gray-200 text-gray-400'
+          }`}
+          aria-disabled={program.status !== '종료'}
+          onClick={(e) => {
+            if (program.status !== '종료') e.preventDefault();
+          }}
+        >
+          평가하기
+        </Link>
+      </div>
+
+      <div className="overflow-x-auto border border-gray-200 bg-white">
+        <table className="w-full text-left text-sm">
+          <thead className="border-b border-gray-200 bg-gray-50">
+            <tr>
+              <th className="px-4 py-3 font-medium text-gray-700">
+                참가자 이름
+              </th>
+              <th className="px-4 py-3 font-medium text-gray-700">공고명</th>
+              <th className="px-4 py-3 font-medium text-gray-700">직무</th>
+              <th className="px-4 py-3 font-medium text-gray-700">참여 상태</th>
+              <th className="px-4 py-3 font-medium text-gray-700">평가 점수</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-100">
+            {participants.map((p) => (
+              <tr key={p.id} className="hover:bg-gray-50">
+                <td className="px-4 py-3 text-[#0a1432]">{p.userName}</td>
+                <td className="px-4 py-3">{p.announcementName}</td>
+                <td className="px-4 py-3">{p.jobType}</td>
+                <td className="px-4 py-3">
+                  <span
+                    className={`inline-block px-2 py-0.5 text-xs font-medium ${participationBadge(p.participationStatus)}`}
+                  >
+                    {participationStatusLabel(p.participationStatus)}
+                  </span>
+                </td>
+                <td className="px-4 py-3">
+                  {p.evalTotalScore !== null ? `${p.evalTotalScore}점` : '-'}
+                </td>
+              </tr>
+            ))}
+            {participants.length === 0 && (
+              <tr>
+                <td colSpan={5} className="px-4 py-8 text-center text-gray-500">
+                  참가자가 없습니다.
                 </td>
               </tr>
             )}
