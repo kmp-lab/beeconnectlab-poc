@@ -1,11 +1,11 @@
 import 'reflect-metadata';
-import { createHash } from 'crypto';
+import * as bcrypt from 'bcrypt';
 import { AppDataSource } from '../data-source';
 import { Admin } from '../entities/admin.entity';
 import { AdminStatus } from '@beeconnectlab/shared-types';
 
-function hashPassword(password: string): string {
-  return createHash('sha256').update(password).digest('hex');
+async function hashPassword(password: string): Promise<string> {
+  return bcrypt.hash(password, 10);
 }
 
 async function seed() {
@@ -23,7 +23,7 @@ async function seed() {
   } else {
     const admin = adminRepo.create({
       email: 'admin@beeconnectlab.com',
-      passwordHash: hashPassword('Admin1234!'),
+      passwordHash: await hashPassword('Admin1234!'),
       name: '관리자',
       phone: '010-0000-0000',
       organization: '비커넥트랩',
