@@ -6,6 +6,7 @@ import { join } from 'path';
 import { AuthModule } from './auth/auth.module';
 import { ProgramsModule } from './programs/programs.module';
 import { AnnouncementsModule } from './announcements/announcements.module';
+import { ApplicationsModule } from './applications/applications.module';
 import { FilesModule } from './files/files.module';
 import { TalentsModule } from './talents/talents.module';
 
@@ -37,6 +38,7 @@ import { TalentsModule } from './talents/talents.module';
     AuthModule,
     ProgramsModule,
     AnnouncementsModule,
+    ApplicationsModule,
     FilesModule,
     TalentsModule,
   ],

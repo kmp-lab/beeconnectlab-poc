@@ -7,9 +7,12 @@ import {
   Req,
   HttpCode,
   HttpStatus,
+  UseGuards,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Response, Request } from 'express';
 import { AuthService } from './auth.service';
+import { UsersService } from '../users/users.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { SocialRegisterDto } from './dto/social-register.dto';
@@ -17,10 +20,14 @@ import {
   ResetPasswordRequestDto,
   ResetPasswordConfirmDto,
 } from './dto/reset-password.dto';
+import { UserGuard } from './guards/user.guard';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly usersService: UsersService,
+  ) {}
 
   @Post('register')
   async register(@Body() dto: RegisterDto) {
@@ -95,6 +102,22 @@ export class AuthController {
     });
     this.authService.setCookies(res, tokens.accessToken, tokens.refreshToken);
     return { message: 'Tokens refreshed' };
+  }
+
+  @Get('me')
+  @UseGuards(UserGuard)
+  async me(@Req() req: Request) {
+    const jwtUser = (req as Request & { user: { id: string } }).user;
+    const user = await this.usersService.findById(jwtUser.id);
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      phone: user.phone,
+    };
   }
 
   @Post('logout')

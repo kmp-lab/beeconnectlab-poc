@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Announcement } from '../database/entities/announcement.entity';
-import { RecruitStatus } from '@beeconnectlab/shared-types';
+import { PublishStatus, RecruitStatus } from '@beeconnectlab/shared-types';
 import { CreateAnnouncementDto } from './dto/create-announcement.dto';
 import { UpdateAnnouncementDto } from './dto/update-announcement.dto';
 
@@ -59,6 +59,29 @@ export class AnnouncementsService {
     const announcement = await this.announcementRepo.findOne({
       where: { id },
       relations: ['program', 'createdBy'],
+    });
+    if (!announcement) return null;
+    return this.withComputedStatus(announcement);
+  }
+
+  async findPublished(): Promise<
+    (Announcement & { computedRecruitStatus: RecruitStatus })[]
+  > {
+    const announcements = await this.announcementRepo.find({
+      where: { publishStatus: PublishStatus.PUBLISHED },
+      order: { createdAt: 'DESC' },
+      relations: ['program'],
+    });
+
+    return announcements.map((a) => this.withComputedStatus(a));
+  }
+
+  async findPublishedById(
+    id: string,
+  ): Promise<(Announcement & { computedRecruitStatus: RecruitStatus }) | null> {
+    const announcement = await this.announcementRepo.findOne({
+      where: { id, publishStatus: PublishStatus.PUBLISHED },
+      relations: ['program'],
     });
     if (!announcement) return null;
     return this.withComputedStatus(announcement);

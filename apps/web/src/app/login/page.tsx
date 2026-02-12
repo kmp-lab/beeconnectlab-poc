@@ -1,10 +1,18 @@
 'use client';
 
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
 
-export default function LoginPage() {
+function LoginContent() {
+  const searchParams = useSearchParams();
+  const returnUrl = searchParams.get('returnUrl');
+  const emailLoginHref = returnUrl
+    ? `/login/email?returnUrl=${encodeURIComponent(returnUrl)}`
+    : '/login/email';
+
   return (
     <main className="flex min-h-screen items-center justify-center bg-white px-4">
       <div className="w-full max-w-sm space-y-8">
@@ -29,7 +37,7 @@ export default function LoginPage() {
           </a>
 
           <Link
-            href="/login/email"
+            href={emailLoginHref}
             className="flex w-full items-center justify-center gap-2 bg-navy px-4 py-3.5 text-sm font-bold text-white transition-opacity hover:opacity-90"
           >
             이메일 로그인
@@ -47,5 +55,19 @@ export default function LoginPage() {
         </p>
       </div>
     </main>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="flex min-h-screen items-center justify-center bg-white">
+          <p className="text-gray-500">불러오는 중...</p>
+        </main>
+      }
+    >
+      <LoginContent />
+    </Suspense>
   );
 }

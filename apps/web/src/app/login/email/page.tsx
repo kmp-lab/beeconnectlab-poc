@@ -1,12 +1,15 @@
 'use client';
 
-import { FormEvent, useState } from 'react';
+import { FormEvent, useState, Suspense } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { api, ApiError } from '@/lib/api';
 
-export default function EmailLoginPage() {
+function EmailLoginContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const returnUrl = searchParams.get('returnUrl');
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -22,7 +25,7 @@ export default function EmailLoginPage() {
         method: 'POST',
         body: { email, password },
       });
-      router.push('/announcements');
+      router.push(returnUrl || '/announcements');
     } catch (err) {
       if (err instanceof ApiError) {
         setError('이메일과 비밀번호를 다시 확인해 주세요.');
@@ -104,5 +107,19 @@ export default function EmailLoginPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function EmailLoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="flex min-h-screen items-center justify-center bg-white">
+          <p className="text-gray-500">불러오는 중...</p>
+        </main>
+      }
+    >
+      <EmailLoginContent />
+    </Suspense>
   );
 }
