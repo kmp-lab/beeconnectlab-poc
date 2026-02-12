@@ -40,7 +40,12 @@ export default function AuthenticatedLayout({
 
   if (!user) return null;
 
-  const navItems = [{ href: '/accounts', label: '계정 관리' }];
+  const navItems = [
+    { href: '/programs', label: '프로그램 관리' },
+    { href: '/announcements', label: '공고 관리' },
+    { href: '/talents', label: '인재 관리' },
+    { href: '/accounts', label: '계정 관리' },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -56,7 +61,7 @@ export default function AuthenticatedLayout({
                   key={item.href}
                   href={item.href}
                   className={`text-sm font-medium ${
-                    pathname === item.href
+                    pathname.startsWith(item.href)
                       ? 'text-blue-600'
                       : 'text-gray-600 hover:text-gray-900'
                   }`}

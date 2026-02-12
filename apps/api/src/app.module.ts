@@ -1,7 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 import { AuthModule } from './auth/auth.module';
+import { ProgramsModule } from './programs/programs.module';
+import { AnnouncementsModule } from './announcements/announcements.module';
+import { FilesModule } from './files/files.module';
+import { TalentsModule } from './talents/talents.module';
 
 @Module({
   imports: [
@@ -24,7 +30,15 @@ import { AuthModule } from './auth/auth.module';
         logging: configService.get('DB_LOGGING', 'false') === 'true',
       }),
     }),
+    ServeStaticModule.forRoot({
+      rootPath: join(process.cwd(), 'uploads'),
+      serveRoot: '/uploads',
+    }),
     AuthModule,
+    ProgramsModule,
+    AnnouncementsModule,
+    FilesModule,
+    TalentsModule,
   ],
 })
 export class AppModule {}
