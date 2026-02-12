@@ -43,7 +43,9 @@ export default function AuthenticatedLayout({
   const navItems = [
     { href: '/programs', label: '프로그램 관리' },
     { href: '/announcements', label: '공고 관리' },
+    { href: '/applications', label: '지원서 관리' },
     { href: '/talents', label: '인재 관리' },
+    { href: '/contents', label: '콘텐츠 관리' },
     { href: '/accounts', label: '계정 관리' },
   ];
 

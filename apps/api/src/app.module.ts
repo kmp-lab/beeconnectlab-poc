@@ -9,6 +9,8 @@ import { AnnouncementsModule } from './announcements/announcements.module';
 import { ApplicationsModule } from './applications/applications.module';
 import { FilesModule } from './files/files.module';
 import { TalentsModule } from './talents/talents.module';
+import { UsersModule } from './users/users.module';
+import { InterviewsModule } from './interviews/interviews.module';
 
 @Module({
   imports: [
@@ -41,6 +43,8 @@ import { TalentsModule } from './talents/talents.module';
     ApplicationsModule,
     FilesModule,
     TalentsModule,
+    UsersModule,
+    InterviewsModule,
   ],
 })
 export class AppModule {}
