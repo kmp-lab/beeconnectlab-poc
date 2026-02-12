@@ -8,6 +8,9 @@ import { api, ApiError } from '@/lib/api';
 const PASSWORD_REGEX =
   /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,16}$/;
 
+const inputClass =
+  'mt-1 block w-full border border-gray-300 px-3 py-2.5 text-sm text-navy placeholder-gray-400 focus:border-navy focus:outline-none';
+
 export default function ResetPasswordConfirmPage() {
   return (
     <Suspense>
@@ -46,7 +49,7 @@ function ResetPasswordConfirmForm() {
     try {
       await api('/auth/reset-password/confirm', {
         method: 'POST',
-        body: { token, password },
+        body: { token, newPassword: password },
       });
       setDone(true);
     } catch (err) {
@@ -62,17 +65,15 @@ function ResetPasswordConfirmForm() {
 
   if (done) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
+      <main className="flex min-h-screen items-center justify-center bg-white px-4">
         <div className="w-full max-w-sm space-y-6 text-center">
-          <h1 className="text-2xl font-bold text-gray-900">
-            비밀번호 변경 완료
-          </h1>
+          <h1 className="text-2xl font-bold text-navy">비밀번호 변경 완료</h1>
           <p className="text-sm text-gray-500">
             비밀번호가 성공적으로 변경되었습니다.
           </p>
           <button
             onClick={() => router.push('/login')}
-            className="w-full rounded-lg bg-blue-600 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+            className="w-full bg-navy px-4 py-3 text-sm font-bold text-white transition-opacity hover:opacity-90"
           >
             로그인하기
           </button>
@@ -82,10 +83,10 @@ function ResetPasswordConfirmForm() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
-      <div className="w-full max-w-sm space-y-6">
+    <main className="flex min-h-screen items-center justify-center bg-white px-4">
+      <div className="w-full max-w-sm space-y-8">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900">새 비밀번호 설정</h1>
+          <h1 className="text-2xl font-bold text-navy">새 비밀번호 설정</h1>
           <p className="mt-2 text-sm text-gray-500">
             새로운 비밀번호를 입력해 주세요.
           </p>
@@ -95,7 +96,7 @@ function ResetPasswordConfirmForm() {
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-navy"
             >
               새 비밀번호
             </label>
@@ -105,7 +106,7 @@ function ResetPasswordConfirmForm() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+              className={inputClass}
               placeholder="8~16자 영문, 숫자, 특수기호"
             />
           </div>
@@ -113,7 +114,7 @@ function ResetPasswordConfirmForm() {
           <div>
             <label
               htmlFor="passwordConfirm"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-navy"
             >
               비밀번호 확인
             </label>
@@ -123,23 +124,23 @@ function ResetPasswordConfirmForm() {
               required
               value={passwordConfirm}
               onChange={(e) => setPasswordConfirm(e.target.value)}
-              className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+              className={inputClass}
             />
           </div>
 
-          {error && <p className="text-sm text-red-600">{error}</p>}
+          {error && <p className="text-sm text-red-500">{error}</p>}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-lg bg-blue-600 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full bg-navy px-4 py-3 text-sm font-bold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? '변경 중...' : '비밀번호 변경'}
           </button>
         </form>
 
         <p className="text-center text-sm">
-          <Link href="/login" className="text-gray-500 hover:text-gray-700">
+          <Link href="/login" className="text-gray-500 hover:text-navy">
             로그인으로 돌아가기
           </Link>
         </p>

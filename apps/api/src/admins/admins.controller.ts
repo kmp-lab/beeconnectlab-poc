@@ -92,6 +92,22 @@ export class AdminsController {
     };
   }
 
+  @Get('auth/me')
+  @UseGuards(AdminGuard)
+  async me(@Req() req: Request) {
+    const currentAdmin = (req as Request & { user: { id: string } }).user;
+    const admin = await this.adminsService.findById(currentAdmin.id);
+    if (!admin) {
+      throw new UnauthorizedException('Admin not found');
+    }
+    return {
+      id: admin.id,
+      email: admin.email,
+      name: admin.name,
+      organization: admin.organization,
+    };
+  }
+
   @Get('accounts')
   @UseGuards(AdminGuard)
   async listAccounts() {

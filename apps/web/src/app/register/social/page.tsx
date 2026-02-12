@@ -23,6 +23,9 @@ interface Terms {
   marketing: boolean;
 }
 
+const inputClass =
+  'mt-1 block w-full border border-gray-300 px-3 py-2.5 text-sm text-navy placeholder-gray-400 focus:border-navy focus:outline-none';
+
 export default function SocialRegisterPage() {
   return (
     <Suspense>
@@ -133,21 +136,20 @@ function SocialRegisterForm() {
   }
 
   return (
-    <main className="flex min-h-screen justify-center bg-gray-50 px-4 py-12">
+    <main className="flex min-h-screen justify-center bg-white px-4 py-12">
       <div className="w-full max-w-md space-y-8">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900">추가 정보 입력</h1>
+          <h1 className="text-2xl font-bold text-navy">추가 정보 입력</h1>
           <p className="mt-2 text-sm text-gray-500">
             소셜 회원가입을 완료해 주세요
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Email (readonly) */}
+        <form onSubmit={handleSubmit} className="space-y-8">
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-sm font-medium text-navy"
             >
               이메일
             </label>
@@ -156,18 +158,19 @@ function SocialRegisterForm() {
               type="email"
               readOnly
               value={email}
-              className="mt-1 block w-full rounded-lg border border-gray-200 bg-gray-100 px-3 py-2 text-sm text-gray-500"
+              className="mt-1 block w-full border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm text-gray-500"
             />
           </div>
 
-          {/* Profile info */}
           <section className="space-y-4">
-            <h2 className="text-lg font-semibold text-gray-900">기본 정보</h2>
+            <h2 className="border-b-2 border-navy pb-2 text-base font-bold text-navy">
+              기본 정보
+            </h2>
 
             <div>
               <label
                 htmlFor="name"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-medium text-navy"
               >
                 이름 <span className="text-red-500">*</span>
               </label>
@@ -177,18 +180,18 @@ function SocialRegisterForm() {
                 required
                 value={form.name}
                 onChange={(e) => updateField('name', e.target.value)}
-                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                className={inputClass}
                 placeholder="실명을 입력해 주세요"
               />
               {errors.name && (
-                <p className="mt-1 text-sm text-red-600">{errors.name}</p>
+                <p className="mt-1 text-sm text-red-500">{errors.name}</p>
               )}
             </div>
 
             <div>
               <label
                 htmlFor="phone"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-medium text-navy"
               >
                 휴대폰 번호 <span className="text-red-500">*</span>
               </label>
@@ -200,18 +203,18 @@ function SocialRegisterForm() {
                 onChange={(e) =>
                   updateField('phone', e.target.value.replace(/\D/g, ''))
                 }
-                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                className={inputClass}
                 placeholder="01012345678"
               />
               {errors.phone && (
-                <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
+                <p className="mt-1 text-sm text-red-500">{errors.phone}</p>
               )}
             </div>
 
             <div>
               <label
                 htmlFor="birthDate"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-medium text-navy"
               >
                 생년월일 <span className="text-red-500">*</span>
               </label>
@@ -221,25 +224,25 @@ function SocialRegisterForm() {
                 required
                 value={form.birthDate}
                 onChange={(e) => updateField('birthDate', e.target.value)}
-                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                className={inputClass}
               />
               {errors.birthDate && (
-                <p className="mt-1 text-sm text-red-600">{errors.birthDate}</p>
+                <p className="mt-1 text-sm text-red-500">{errors.birthDate}</p>
               )}
             </div>
 
             <div>
-              <span className="block text-sm font-medium text-gray-700">
+              <span className="block text-sm font-medium text-navy">
                 성별 <span className="text-red-500">*</span>
               </span>
               <div className="mt-1 flex gap-3">
                 <button
                   type="button"
                   onClick={() => updateField('gender', Gender.MALE)}
-                  className={`flex-1 rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
+                  className={`flex-1 border px-4 py-2.5 text-sm font-medium transition-colors ${
                     form.gender === Gender.MALE
-                      ? 'border-blue-600 bg-blue-50 text-blue-600'
-                      : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                      ? 'border-navy bg-navy text-white'
+                      : 'border-gray-300 text-gray-600 hover:border-navy'
                   }`}
                 >
                   남
@@ -247,41 +250,40 @@ function SocialRegisterForm() {
                 <button
                   type="button"
                   onClick={() => updateField('gender', Gender.FEMALE)}
-                  className={`flex-1 rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
+                  className={`flex-1 border px-4 py-2.5 text-sm font-medium transition-colors ${
                     form.gender === Gender.FEMALE
-                      ? 'border-blue-600 bg-blue-50 text-blue-600'
-                      : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                      ? 'border-navy bg-navy text-white'
+                      : 'border-gray-300 text-gray-600 hover:border-navy'
                   }`}
                 >
                   여
                 </button>
               </div>
               {errors.gender && (
-                <p className="mt-1 text-sm text-red-600">{errors.gender}</p>
+                <p className="mt-1 text-sm text-red-500">{errors.gender}</p>
               )}
             </div>
           </section>
 
-          {/* Optional info */}
           <section className="space-y-4">
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="border-b border-gray-300 pb-2 text-base font-bold text-navy">
               추가 정보{' '}
               <span className="text-sm font-normal text-gray-400">(선택)</span>
             </h2>
 
             <div className="relative">
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium text-navy">
                 관심지역
               </label>
               <button
                 type="button"
                 onClick={() => setShowRegionDropdown(!showRegionDropdown)}
-                className="mt-1 flex w-full items-center justify-between rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                className="mt-1 flex w-full items-center justify-between border border-gray-300 px-3 py-2.5 text-sm focus:border-navy focus:outline-none"
               >
                 <span
                   className={
                     form.interestRegions.length > 0
-                      ? 'text-gray-900'
+                      ? 'text-navy'
                       : 'text-gray-400'
                   }
                 >
@@ -304,17 +306,17 @@ function SocialRegisterForm() {
                 </svg>
               </button>
               {showRegionDropdown && (
-                <div className="absolute z-10 mt-1 max-h-48 w-full overflow-y-auto rounded-lg border border-gray-300 bg-white shadow-lg">
+                <div className="absolute z-10 mt-1 max-h-48 w-full overflow-y-auto border border-gray-300 bg-white shadow-lg">
                   {REGIONS.map((region) => (
                     <label
                       key={region}
-                      className="flex cursor-pointer items-center px-3 py-2 text-sm hover:bg-gray-50"
+                      className="flex cursor-pointer items-center px-3 py-2 text-sm text-navy hover:bg-gray-50"
                     >
                       <input
                         type="checkbox"
                         checked={form.interestRegions.includes(region)}
                         onChange={() => toggleRegion(region)}
-                        className="mr-2 h-4 w-4 rounded border-gray-300"
+                        className="mr-2 h-4 w-4 accent-navy"
                       />
                       {region}
                     </label>
@@ -326,7 +328,7 @@ function SocialRegisterForm() {
             <div>
               <label
                 htmlFor="desiredJob"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-medium text-navy"
               >
                 희망직무
               </label>
@@ -335,7 +337,7 @@ function SocialRegisterForm() {
                 type="text"
                 value={form.desiredJob}
                 onChange={(e) => updateField('desiredJob', e.target.value)}
-                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                className={inputClass}
                 placeholder="희망 직무를 입력해 주세요"
               />
             </div>
@@ -343,7 +345,7 @@ function SocialRegisterForm() {
             <div>
               <label
                 htmlFor="skills"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-medium text-navy"
               >
                 보유역량
               </label>
@@ -352,28 +354,25 @@ function SocialRegisterForm() {
                 type="text"
                 value={form.skills}
                 onChange={(e) => updateField('skills', e.target.value)}
-                className="mt-1 block w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+                className={inputClass}
                 placeholder="보유 역량을 입력해 주세요"
               />
             </div>
           </section>
 
-          {/* Terms */}
           <section className="space-y-3">
-            <h2 className="text-lg font-semibold text-gray-900">
+            <h2 className="border-b border-gray-300 pb-2 text-base font-bold text-navy">
               이용약관 동의
             </h2>
 
-            <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-gray-300 px-4 py-3">
+            <label className="flex cursor-pointer items-center gap-2 border border-gray-300 bg-gray-50 px-4 py-3">
               <input
                 type="checkbox"
                 checked={allChecked}
                 onChange={toggleAll}
-                className="h-4 w-4 rounded border-gray-300"
+                className="h-4 w-4 accent-navy"
               />
-              <span className="text-sm font-medium text-gray-900">
-                전체 동의
-              </span>
+              <span className="text-sm font-bold text-navy">전체 동의</span>
             </label>
 
             <div className="space-y-2 pl-1">
@@ -387,7 +386,7 @@ function SocialRegisterForm() {
                       ageVerification: !t.ageVerification,
                     }))
                   }
-                  className="h-4 w-4 rounded border-gray-300"
+                  className="h-4 w-4 accent-navy"
                 />
                 <span className="text-sm text-gray-700">
                   만 14세 이상입니다{' '}
@@ -402,7 +401,7 @@ function SocialRegisterForm() {
                   onChange={() =>
                     setTerms((t) => ({ ...t, serviceTerms: !t.serviceTerms }))
                   }
-                  className="h-4 w-4 rounded border-gray-300"
+                  className="h-4 w-4 accent-navy"
                 />
                 <span className="text-sm text-gray-700">
                   서비스 이용약관 동의{' '}
@@ -417,7 +416,7 @@ function SocialRegisterForm() {
                   onChange={() =>
                     setTerms((t) => ({ ...t, privacyPolicy: !t.privacyPolicy }))
                   }
-                  className="h-4 w-4 rounded border-gray-300"
+                  className="h-4 w-4 accent-navy"
                 />
                 <span className="text-sm text-gray-700">
                   개인정보 수집 및 이용 동의{' '}
@@ -432,7 +431,7 @@ function SocialRegisterForm() {
                   onChange={() =>
                     setTerms((t) => ({ ...t, marketing: !t.marketing }))
                   }
-                  className="h-4 w-4 rounded border-gray-300"
+                  className="h-4 w-4 accent-navy"
                 />
                 <span className="text-sm text-gray-700">
                   마케팅 이용 동의 <span className="text-gray-400">(선택)</span>
@@ -441,12 +440,12 @@ function SocialRegisterForm() {
             </div>
           </section>
 
-          {serverError && <p className="text-sm text-red-600">{serverError}</p>}
+          {serverError && <p className="text-sm text-red-500">{serverError}</p>}
 
           <button
             type="submit"
             disabled={loading || !allRequired}
-            className="w-full rounded-lg bg-blue-600 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full bg-lime px-4 py-3.5 text-sm font-bold text-navy transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? '가입 중...' : '가입하기'}
           </button>
