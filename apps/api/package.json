@@ -15,7 +15,9 @@
     "migration:run": "typeorm-ts-node-commonjs migration:run -d src/database/data-source.ts",
     "migration:revert": "typeorm-ts-node-commonjs migration:revert -d src/database/data-source.ts",
     "seed": "ts-node src/database/seeds/seed.ts",
-    "seed:demo": "ts-node src/database/seeds/demo-seed.ts"
+    "seed:demo": "ts-node src/database/seeds/demo-seed.ts",
+    "test": "jest --config jest.config.ts",
+    "test:cov": "jest --config jest.config.ts --coverage"
   },
   "dependencies": {
     "@beeconnectlab/shared-types": "workspace:*",
@@ -46,17 +48,23 @@
   "devDependencies": {
     "@beeconnectlab/eslint-config": "workspace:*",
     "@nestjs/cli": "^11.0.0",
+    "@nestjs/testing": "^11.1.13",
     "@types/bcrypt": "^6.0.0",
     "@types/cookie-parser": "^1.4.10",
     "@types/exceljs": "^1.3.2",
     "@types/express": "^5.0.0",
+    "@types/jest": "^30.0.0",
     "@types/multer": "^2.0.0",
     "@types/node": "^22.13.4",
     "@types/passport-jwt": "^4.0.1",
     "@types/passport-local": "^1.0.38",
+    "@types/supertest": "^6.0.3",
     "@types/uuid": "^11.0.0",
     "eslint": "^9.21.0",
+    "jest": "^30.2.0",
     "prettier": "^3.5.3",
+    "supertest": "^7.2.2",
+    "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3"
   }

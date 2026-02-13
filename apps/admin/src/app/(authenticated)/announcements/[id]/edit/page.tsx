@@ -4,6 +4,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { api, ApiError } from '@/lib/api';
 import { toast } from '@/components/Toast';
+import RichTextEditor from '@/components/RichTextEditor';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
@@ -331,13 +332,11 @@ export default function EditAnnouncementPage() {
             <label className="mb-1 block text-sm font-medium text-gray-700">
               상세 내용
             </label>
-            <textarea
-              name="detailContent"
+            <RichTextEditor
               value={form.detailContent}
-              onChange={handleChange}
-              required
-              rows={12}
-              className="w-full border border-gray-300 px-3 py-2 text-sm focus:border-[#0a1432] focus:outline-none"
+              onChange={(html) =>
+                setForm((prev) => ({ ...prev, detailContent: html }))
+              }
             />
           </div>
         </section>
